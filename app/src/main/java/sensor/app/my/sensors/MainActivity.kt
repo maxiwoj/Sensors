@@ -2,25 +2,22 @@ package sensor.app.my.sensors
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
+import android.widget.EditText
 
 
 class MainActivity : Activity(), SensorEventListener {
     private var sensorManager: SensorManager? = null
-    private var view: View? = null
+    private var editText: EditText? = null
     private var lastUpdate: Long = 0
-    private var rabbitClient : RabbitClient = RabbitClient()
-
+    private var rabbitClient: RabbitClient = RabbitClient()
 
 
     /** Called when the activity is first created.  */
@@ -31,8 +28,8 @@ class MainActivity : Activity(), SensorEventListener {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        view = findViewById(R.id.textView)
-        view!!.setBackgroundColor(Color.GREEN)
+        editText = findViewById(R.id.text)
+        editText!!.setText(getString(R.string.DefaultID))
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         lastUpdate = System.currentTimeMillis()
@@ -41,21 +38,26 @@ class MainActivity : Activity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type == Sensor.TYPE_LIGHT) {
-//            rabbitClient.publishMessage(getLocalIpAddress() + "#LIGHT#" + event.values[0])
-            Toast.makeText(applicationContext, getLocalIpAddress() + "#LIGHT#" + event.values[0], Toast.LENGTH_SHORT).show()
+            rabbitClient.publishMessage(getId() + "#LIGHT#" + event.values[0])
+//            Toast.makeText(applicationContext, getId() + "#LIGHT#" + event.values[0], Toast.LENGTH_SHORT).show()
         } else if (event.sensor.type == Sensor.TYPE_PRESSURE) {
-//            rabbitClient.publishMessage(getLocalIpAddress() + "#PRESSURE#" + event.values[0])
-            Toast.makeText(applicationContext, getLocalIpAddress() + "#PRESSURE#" + event.values[0], Toast.LENGTH_SHORT).show()
+            rabbitClient.publishMessage(getId() + "#PRESSURE#" + event.values[0])
+//            Toast.makeText(applicationContext, getId() + "#PRESSURE#" + event.values[0], Toast.LENGTH_SHORT).show()
 
         }
 
     }
 
-    fun getLocalIpAddress(): String? {
-        val manager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val info = manager.connectionInfo
-        return info.ipAddress.toString()
+    fun getId(): String? {
+        if (editText!!.text.isNotEmpty()) {
+            return editText!!.text.toString()
+        } else {
+            val manager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val info = manager.connectionInfo
+            return info.ipAddress.toString()
+        }
     }
+
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
 
     }

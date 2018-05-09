@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView"
+    <EditText
+        android:gravity="center"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Shake to get a toast and to switch color" />
+        android:layout_height="wrap_content"
+        android:id="@+id/text" />
 
 </LinearLayout>

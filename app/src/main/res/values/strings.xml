@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sensors</string>
+    <string name="DefaultID">YourID</string>
 </resources>

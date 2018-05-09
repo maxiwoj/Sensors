@@ -17,11 +17,6 @@ class RabbitClient {
     private var publishThread : Thread? = null
     internal var factory = ConnectionFactory()
 
-    constructor() {
-        setupConnectionFactory()
-        publishToAMQP()
-    }
-
     fun publishMessage(message: String) {
         try {
             queue.putLast(message)
@@ -86,5 +81,10 @@ class RabbitClient {
             }
         })
         publishThread!!.start()
+    }
+
+    init {
+        setupConnectionFactory()
+        publishToAMQP()
     }
 }
