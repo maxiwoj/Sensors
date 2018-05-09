@@ -11,6 +11,13 @@ import java.util.concurrent.LinkedBlockingDeque
  * Created by maksymilian on 09/05/2018.
  */
 
+
+object RabbitMqConfig {
+    val Host = "0.0.0.0"
+    val Port = 9000
+    val QueueName = "iot-queue"
+}
+
 class RabbitClient {
 
     private val queue = LinkedBlockingDeque<String>()
@@ -35,7 +42,8 @@ class RabbitClient {
     private fun setupConnectionFactory() {
         try {
             factory.isAutomaticRecoveryEnabled = false
-            factory.host = ""
+            factory.host = RabbitMqConfig.Host
+            factory.port = RabbitMqConfig.Port
         } catch (e1: KeyManagementException) {
             e1.printStackTrace()
         } catch (e1: NoSuchAlgorithmException) {
@@ -57,7 +65,7 @@ class RabbitClient {
                     while (true) {
                         val message = queue.takeFirst()
                         try {
-                            ch.basicPublish("amq.fanout", "chat", null, message.toByteArray())
+                            ch.basicPublish("", RabbitMqConfig.QueueName, null, message.toByteArray())
                             Log.d("", "[s] $message")
                             ch.waitForConfirmsOrDie()
                         } catch (e: Exception) {
