@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import android.widget.EditText
+import android.widget.Toast
 
 
 class MainActivity : Activity(), SensorEventListener {
@@ -39,10 +40,10 @@ class MainActivity : Activity(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type == Sensor.TYPE_LIGHT) {
             rabbitClient.publishMessage(getId() + "#LIGHT#" + event.values[0])
-//            Toast.makeText(applicationContext, getId() + "#LIGHT#" + event.values[0], Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, getId() + "#LIGHT#" + event.values[0], Toast.LENGTH_SHORT).show()
         } else if (event.sensor.type == Sensor.TYPE_PRESSURE) {
             rabbitClient.publishMessage(getId() + "#PRESSURE#" + event.values[0])
-//            Toast.makeText(applicationContext, getId() + "#PRESSURE#" + event.values[0], Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, getId() + "#PRESSURE#" + event.values[0], Toast.LENGTH_SHORT).show()
 
         }
 
